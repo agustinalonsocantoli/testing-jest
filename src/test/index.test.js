@@ -2,15 +2,21 @@ const { Room, Booking } = require('../js/index.js')
 
 describe('Check if room is occupied', () => {
     test('Room is not occupied', () => {
-        let roomAvailable = new Room();
-        expect(roomAvailable.isOccupied()).toBeDefined();
-        expect(roomAvailable.isOccupied(10)).toBeFalsy();
+        let bookings = [{ checkin: new Date('2023/02/17'), checkout: new Date('2023/01/27') }]
+        let roomAvailable = new Room('', bookings, 200, 10);
+        let date = new Date('2023/02/10');
+
+        expect(roomAvailable.isOccupied(date)).toBeDefined();
+        expect(roomAvailable.isOccupied(date)).toBeFalsy();
     })
 
     test('Room is occupied', () => {
-        let roomOccupied = new Room();
-        expect(roomOccupied.isOccupied()).toBeDefined();
-        expect(roomOccupied.isOccupied(5)).toBeTruthy();
+        let bookings = [{ checkin: new Date('2023/02/05'), checkout: new Date('2023/02/15') }]
+        let roomOccupied = new Room('', bookings, 200, 10);
+        let date = new Date('2023/02/10');
+
+        expect(roomOccupied.isOccupied(date)).toBeDefined();
+        expect(roomOccupied.isOccupied(date)).toBeTruthy();
     })
 })
 
@@ -28,7 +34,7 @@ test('Check days with occupancy within the range of dates provided', () => {
 
     expect(room.occupancyPercentage(startDate, endDate)).not.toBeNull();
     expect(room.occupancyPercentage(startDate, endDate)).toBeDefined();
-    expect(room.occupancyPercentage(startDate, endDate)).toBe(66);
+    expect(room.occupancyPercentage(startDate, endDate)).toBe(`66.67%`);
 })
 
 test('Check total occupancy percentage across all rooms', () => {
@@ -61,7 +67,7 @@ test('Check total occupancy percentage across all rooms', () => {
 
     expect(Room.totalOccupancyPercentage(rooms, startDate, endDate)).not.toBeNull();
     expect(Room.totalOccupancyPercentage(rooms, startDate, endDate)).toBeDefined();
-    expect(Room.totalOccupancyPercentage(rooms, startDate, endDate)).toBe(55);
+    expect(Room.totalOccupancyPercentage(rooms, startDate, endDate)).toBe(`55.56%`);
 })
 
 test('Check rooms that are not occupied for the entire duration', () => {
@@ -110,5 +116,5 @@ test('Check the fee, including discounts on room and booking', () => {
 
     expect(book.getfee()).not.toBeNull();
     expect(book.getfee()).toBeDefined();
-    expect(book.getfee()).toBe(350);
+    expect(book.getfee()).toBe(`$350.00`);
 })
