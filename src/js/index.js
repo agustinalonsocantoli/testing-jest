@@ -43,11 +43,51 @@ class Room {
         // returns the total occupancy percentage across all rooms in the array
         let sDate = startDate.getTime();
         let eDate = endDate.getTime();
+        let bookCount = 0;
+        let roomCount = 0;
 
+        if(rooms.length > 0){
+            rooms.forEach(room => {
+                if(room.bookings.length > 0){
+                    room.bookings.forEach(book => {
+                        bookCount++
+
+                        if(book.checkin.getTime() >= sDate && book.checkout.getTime() < eDate){
+                            roomCount++
+                        }
+                    })
+                }
+            })
+        }
+
+        return parseInt((roomCount * 100) / bookCount)
     }
 
     static availableRooms(rooms, startDate, endDate) {
         // returns an array of all rooms in the array that are not occupied for the entire duration
+        let sDate = startDate.getTime();
+        let eDate = endDate.getTime();
+        let freeRooms = [];
+
+        if(rooms.length > 0){
+            rooms.forEach(room => {
+                if(room.bookings.length > 0){
+
+                    let available = true;
+                    room.bookings.forEach(book => {
+                        if(book.checkin.getTime() >= sDate && book.checkout.getTime() < eDate) {
+                            available = false;
+                        } 
+                    })
+
+                    if (available) {
+                        freeRooms.push(room)
+                    }
+                }
+            })
+        }
+
+        return freeRooms;
     }
 }
 
