@@ -1,19 +1,33 @@
-'use strict'
+interface RoomInput {
+    name: string;
+    bookings: Booking[];
+    rate: number;
+    discount: number;
+}
+
+interface BookingInput {
+    name: string;
+    email: string;
+    checkin: Date;
+    checkout: Date;
+    discount: number;
+    room: Room;
+}
 
 class Room {
-    name;
-    bookings;
-    rate;
-    discount;
+    name: string;
+    bookings: Booking[];
+    rate: number;
+    discount: number;
 
-    constructor(name, bookings, rate, discount) {
-        this.name = name;
-        this.bookings = bookings;
-        this.rate = rate;
-        this.discount = discount;
+    constructor(roomInput: RoomInput) {
+        this.name = roomInput.name;
+        this.bookings = roomInput.bookings;
+        this.rate = roomInput.rate;
+        this.discount = roomInput.discount;
     }
 
-    isOccupied(date) {
+    isOccupied(date: Date) {
         // returns false if not occupied, returns true if occupied
         let formatDate = date.getTime();
         let available = true;
@@ -21,7 +35,7 @@ class Room {
         if(this.bookings.length > 0) {
 
             this.bookings.forEach(book => {
-                if(book.checkin.getTime() < formatDate && book.checkout > formatDate){
+                if(book['checkin'].getTime() < formatDate && book['checkout'].getTime() > formatDate){
                     available = true
                 } else {
                     available = false
@@ -35,7 +49,7 @@ class Room {
         return available
     }
 
-    occupancyPercentage(startDate, endDate) {
+    occupancyPercentage(startDate: Date, endDate: Date) {
         // returns the percentage of days with occupancy within the range of dates provided (inclusive)
         let formatStartDate = startDate.getTime();
         let formatEndDate = endDate.getTime();
@@ -43,7 +57,7 @@ class Room {
     
         if(this.bookings.length > 0) {
             this.bookings.forEach( book => {
-                if(book.checkin.getTime() >= formatStartDate && book.checkout.getTime() < formatEndDate){
+                if(book['checkin'].getTime() >= formatStartDate && book['checkout'].getTime() < formatEndDate){
                     bookCount++
                 }
             })
@@ -52,7 +66,7 @@ class Room {
         return `${((bookCount * 100) / this.bookings.length).toFixed(2)}%`
     };
 
-    static totalOccupancyPercentage(rooms, startDate, endDate) {
+    static totalOccupancyPercentage(rooms: Room[], startDate: Date, endDate: Date) {
         // returns the total occupancy percentage across all rooms in the array
         let formatStartDate = startDate.getTime();
         let formatEndDate = endDate.getTime();
@@ -61,11 +75,11 @@ class Room {
 
         if(rooms.length > 0){
             rooms.forEach(room => {
-                if(room.bookings.length > 0){
-                    room.bookings.forEach(book => {
+                if(room['bookings'].length > 0){
+                    room['bookings'].forEach(book => {
                         bookCount++
 
-                        if(book.checkin.getTime() >= formatStartDate && book.checkout.getTime() < formatEndDate){
+                        if(book['checkin'].getTime() >= formatStartDate && book['checkout'].getTime() < formatEndDate){
                             roomCount++
                         }
                     })
@@ -76,19 +90,19 @@ class Room {
         return `${((roomCount * 100) / bookCount).toFixed(2)}%`;
     }
 
-    static availableRooms(rooms, startDate, endDate) {
+    static availableRooms(rooms: Room[], startDate: Date, endDate: Date) {
         // returns an array of all rooms in the array that are not occupied for the entire duration
         let formatStartDate = startDate.getTime();
         let formatEndDate = endDate.getTime();
-        let freeRooms = [];
+        let freeRooms: Room[] = [];
 
         if(rooms.length > 0){
             rooms.forEach(room => {
-                if(room.bookings.length > 0){
+                if(room['bookings'].length > 0){
 
                     let available = true;
-                    room.bookings.forEach(book => {
-                        if(book.checkin.getTime() >= formatStartDate && book.checkout.getTime() < formatEndDate) {
+                    room['bookings'].forEach(book => {
+                        if(book['checkin'].getTime() >= formatStartDate && book['checkout'].getTime() < formatEndDate) {
                             available = false;
                         } 
                     })
@@ -105,23 +119,23 @@ class Room {
 }
 
 class Booking {
-    name;
-    email;
-    checkin;
-    checkout;
-    discount;
-    room;
+    name: string;
+    email: string;
+    checkin: Date;
+    checkout: Date;
+    discount: number;
+    room: Room;
 
-    constructor(name, email, checkin, checkout, discount, room) {
-        this.name = name;
-        this.email = email;
-        this.checkin = checkin;
-        this.checkout = checkout;
-        this.discount = discount;
-        this.room = room;
+    constructor(bookingInput: BookingInput) {
+        this.name = bookingInput.name;
+        this.email = bookingInput.email;
+        this.checkin = bookingInput.checkin;
+        this.checkout = bookingInput.checkout;
+        this.discount = bookingInput.discount;
+        this.room = bookingInput.room;
     }
 
-    getfee() {
+    getfee(): string {
         // returns the fee, including discounts on room and booking
         let roomDiscount = (this.room.rate * this.room.discount) / 100;
         let bookDiscount = (this.room.rate * this.discount) / 100;
@@ -132,4 +146,4 @@ class Booking {
 
 }
 
-module.exports = { Room, Booking };
+export { Room, Booking };
