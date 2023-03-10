@@ -1,11 +1,11 @@
-interface RoomInput {
+interface RoomInt {
     name: string;
     bookings: Booking[];
     rate: number;
     discount: number;
 }
 
-interface BookingInput {
+interface BookingInt {
     name: string;
     email: string;
     checkin: Date;
@@ -20,14 +20,14 @@ class Room {
     rate: number;
     discount: number;
 
-    constructor(roomInput: RoomInput) {
+    constructor(roomInput: RoomInt) {
         this.name = roomInput.name;
         this.bookings = roomInput.bookings;
         this.rate = roomInput.rate;
         this.discount = roomInput.discount;
     }
 
-    isOccupied(date: Date) {
+    isOccupied(date: Date): boolean {
         // returns false if not occupied, returns true if occupied
         let formatDate = date.getTime();
         let available = true;
@@ -49,7 +49,7 @@ class Room {
         return available
     }
 
-    occupancyPercentage(startDate: Date, endDate: Date) {
+    occupancyPercentage(startDate: Date, endDate: Date): string {
         // returns the percentage of days with occupancy within the range of dates provided (inclusive)
         let formatStartDate = startDate.getTime();
         let formatEndDate = endDate.getTime();
@@ -66,7 +66,7 @@ class Room {
         return `${((bookCount * 100) / this.bookings.length).toFixed(2)}%`
     };
 
-    static totalOccupancyPercentage(rooms: Room[], startDate: Date, endDate: Date) {
+    static totalOccupancyPercentage(rooms: Room[], startDate: Date, endDate: Date): string {
         // returns the total occupancy percentage across all rooms in the array
         let formatStartDate = startDate.getTime();
         let formatEndDate = endDate.getTime();
@@ -90,7 +90,7 @@ class Room {
         return `${((roomCount * 100) / bookCount).toFixed(2)}%`;
     }
 
-    static availableRooms(rooms: Room[], startDate: Date, endDate: Date) {
+    static availableRooms(rooms: Room[], startDate: Date, endDate: Date): Room[] {
         // returns an array of all rooms in the array that are not occupied for the entire duration
         let formatStartDate = startDate.getTime();
         let formatEndDate = endDate.getTime();
@@ -126,7 +126,7 @@ class Booking {
     discount: number;
     room: Room;
 
-    constructor(bookingInput: BookingInput) {
+    constructor(bookingInput: BookingInt) {
         this.name = bookingInput.name;
         this.email = bookingInput.email;
         this.checkin = bookingInput.checkin;
