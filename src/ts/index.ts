@@ -35,11 +35,9 @@ class Room {
         if(this.bookings.length > 0) {
 
             this.bookings.forEach(book => {
-                if(book['checkin'].getTime() < formatDate && book['checkout'].getTime() > formatDate){
-                    available = true
-                } else {
+                if(book['checkin'].getTime() > formatDate && book['checkout'].getTime() < formatDate){
                     available = false
-                }
+                } 
             })
 
         } else {
@@ -49,7 +47,7 @@ class Room {
         return available
     }
 
-    occupancyPercentage(startDate: Date, endDate: Date): string {
+    occupancyPercentage(startDate: Date, endDate: Date): number {
         // returns the percentage of days with occupancy within the range of dates provided (inclusive)
         let formatStartDate = startDate.getTime();
         let formatEndDate = endDate.getTime();
@@ -63,10 +61,10 @@ class Room {
             })
         }
     
-        return `${((bookCount * 100) / this.bookings.length).toFixed(2)}%`
+        return parseFloat(((bookCount * 100) / this.bookings.length).toFixed(2))
     };
 
-    static totalOccupancyPercentage(rooms: Room[], startDate: Date, endDate: Date): string {
+    static totalOccupancyPercentage(rooms: Room[], startDate: Date, endDate: Date): number {
         // returns the total occupancy percentage across all rooms in the array
         let formatStartDate = startDate.getTime();
         let formatEndDate = endDate.getTime();
@@ -87,7 +85,7 @@ class Room {
             })
         }
 
-        return `${((roomCount * 100) / bookCount).toFixed(2)}%`;
+        return parseFloat(((roomCount * 100) / bookCount).toFixed(2));
     }
 
     static availableRooms(rooms: Room[], startDate: Date, endDate: Date): Room[] {
@@ -135,13 +133,13 @@ class Booking {
         this.room = bookingInput.room;
     }
 
-    getfee(): string {
+    getfee(): number {
         // returns the fee, including discounts on room and booking
         let roomDiscount = (this.room.rate * this.room.discount) / 100;
         let bookDiscount = (this.room.rate * this.discount) / 100;
         let finalPrice = (this.room.rate - roomDiscount - bookDiscount);
 
-        return `$${finalPrice.toFixed(2)}`
+        return parseFloat(finalPrice.toFixed(2))
     }
 
 }

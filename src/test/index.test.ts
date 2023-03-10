@@ -71,9 +71,7 @@ test('Check days with occupancy within the range of dates provided', () => {
     let startDate = new Date('2023/02/07');
     let endDate = new Date('2023/02/27');
 
-    expect(room.occupancyPercentage(startDate, endDate)).not.toBeNull();
-    expect(room.occupancyPercentage(startDate, endDate)).toBeDefined();
-    expect(room.occupancyPercentage(startDate, endDate)).toBe(`66.67%`);
+    expect(room.occupancyPercentage(startDate, endDate)).toBe(66.67);
 })
 
 test('Check total occupancy percentage across all rooms', () => {
@@ -104,9 +102,7 @@ test('Check total occupancy percentage across all rooms', () => {
 
     let rooms = [room1, room2, room3]
 
-    expect(Room.totalOccupancyPercentage(rooms, startDate, endDate)).not.toBeNull();
-    expect(Room.totalOccupancyPercentage(rooms, startDate, endDate)).toBeDefined();
-    expect(Room.totalOccupancyPercentage(rooms, startDate, endDate)).toBe(`55.56%`);
+    expect(Room.totalOccupancyPercentage(rooms, startDate, endDate)).toBe(55.56);
 })
 
 test('Check rooms that are not occupied for the entire duration', () => {
@@ -132,8 +128,6 @@ test('Check rooms that are not occupied for the entire duration', () => {
     let rooms = [room1, room2, room3]
     let result = [room1, room3]
 
-    expect(Room.availableRooms(rooms, startDate, endDate)).not.toBeNull();
-    expect(Room.availableRooms(rooms, startDate, endDate)).toBeDefined();
     expect(Room.availableRooms(rooms, startDate, endDate)).not.toMatchObject(rooms);
     expect(Room.availableRooms(rooms, startDate, endDate)).toMatchObject(result);
 })
@@ -149,7 +143,5 @@ test('Check the fee, including discounts on room and booking', () => {
 
     let book = new Booking({name: '', email: '', checkin: new Date('2023/02/05'), checkout: new Date('2023/02/05'), discount: 20, room: room})
 
-    expect(book.getfee()).not.toBeNull();
-    expect(book.getfee()).toBeDefined();
-    expect(book.getfee()).toBe(`$350.00`);
+    expect(book.getfee()).toBe(350.00);
 })
